@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
+import { UnitViewer } from './components/units/UnitViewer';
 import { SlideDeckViewer } from './components/presentation/SlideDeckViewer';
 import { TeacherDashboard } from './components/teacher/TeacherDashboard';
 
 export const App: React.FC = () => {
-  const [currentView, setCurrentView] = useState<'presentation' | 'teacher'>('presentation');
+  const [currentView, setCurrentView] = useState<'units' | 'presentation' | 'teacher'>('units');
   const [isDark, setIsDark] = useState<boolean>(() => {
     try {
       const saved = localStorage.getItem('theme');
@@ -32,15 +33,25 @@ export const App: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-slate-100 dark:bg-slate-950 text-slate-900 dark:text-slate-100 selection:bg-indigo-600 selection:text-white font-sans antialiased transition-colors">
-      {currentView === 'presentation' ? (
+      {currentView === 'units' && (
+        <UnitViewer 
+          onOpenTeacherPanel={() => setCurrentView('teacher')}
+          isDark={isDark}
+          onToggleTheme={toggleTheme}
+        />
+      )}
+
+      {currentView === 'presentation' && (
         <SlideDeckViewer 
           onOpenTeacherPanel={() => setCurrentView('teacher')} 
           isDark={isDark}
           onToggleTheme={toggleTheme}
         />
-      ) : (
+      )}
+
+      {currentView === 'teacher' && (
         <div className="py-6 px-4 max-w-5xl mx-auto">
-          <TeacherDashboard onBackToApp={() => setCurrentView('presentation')} />
+          <TeacherDashboard onBackToApp={() => setCurrentView('units')} />
         </div>
       )}
     </div>

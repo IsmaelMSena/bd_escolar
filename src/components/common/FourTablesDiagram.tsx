@@ -467,7 +467,7 @@ export const FourTablesDiagram: React.FC<FourTablesDiagramProps> = ({
                         {DEMO_CURSOS.map((c) => (
                           <tr key={c.id_curso} className="hover:bg-slate-50 dark:hover:bg-slate-800/40">
                             <td className="py-1 px-2 text-indigo-600 dark:text-indigo-400 font-bold w-16">{c.id_curso}</td>
-                            <td className="py-1 px-2 text-slate-700 dark:text-slate-300">{c.nombre_curso}</td>
+                            <td className="py-1 px-2 text-slate-700 dark:text-slate-300">{(c as any).nombre_curso || c.nombre}</td>
                           </tr>
                         ))}
                       </tbody>
@@ -564,7 +564,7 @@ export const FourTablesDiagram: React.FC<FourTablesDiagramProps> = ({
                             <td className="py-1 px-1.5 text-slate-800 dark:text-slate-200 font-sans">{a.nombre}</td>
                             <td className="py-1 px-1.5 text-slate-600 dark:text-slate-400 font-sans">{a.apellido}</td>
                             <td className="py-1 px-1.5 text-indigo-600 dark:text-indigo-400 font-bold text-center w-8 bg-indigo-50/40 dark:bg-indigo-950/20 rounded">
-                              {a.id_curso}
+                              {(a as any).id_curso ?? 1}
                             </td>
                           </tr>
                         ))}
@@ -637,7 +637,7 @@ export const FourTablesDiagram: React.FC<FourTablesDiagramProps> = ({
                         {DEMO_MATERIAS.map((m) => (
                           <tr key={m.id_materia} className="hover:bg-slate-50 dark:hover:bg-slate-800/40">
                             <td className="py-1 px-2 text-emerald-600 dark:text-emerald-400 font-bold w-16">{m.id_materia}</td>
-                            <td className="py-1 px-2 text-slate-700 dark:text-slate-300 font-sans">{m.nombre_materia}</td>
+                            <td className="py-1 px-2 text-slate-700 dark:text-slate-300 font-sans">{(m as any).nombre_materia || m.nombre}</td>
                           </tr>
                         ))}
                       </tbody>
@@ -728,7 +728,7 @@ export const FourTablesDiagram: React.FC<FourTablesDiagramProps> = ({
                               {i.id_alumno}
                             </td>
                             <td className="py-1 px-1.5 text-emerald-600 dark:text-emerald-400 font-bold text-center w-12 bg-emerald-50/40 dark:bg-emerald-950/20 rounded">
-                              {i.id_materia}
+                              {(i as any).id_materia ?? i.id_curso}
                             </td>
                           </tr>
                         ))}

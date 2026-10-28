@@ -47,6 +47,14 @@ export interface ModuleProgress {
   lastVisitedAt?: string;
 }
 
+export interface UnitProgress {
+  unitId: number;
+  visited: boolean;
+  activityCompleted: boolean;
+  quizScore?: number;
+  lastVisitedAt: string;
+}
+
 export interface ExternalPlatformConfig {
   name: string;
   url: string;

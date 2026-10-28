@@ -1,51 +1,72 @@
-// Datos oficiales del proyecto escolar: 4 tablas relacionadas
+// Datos oficiales del proyecto escolar: Modelo relacional de 5 tablas (MySQL)
 
 export interface CursoItem {
   id_curso: number;
-  nombre_curso: string;
+  nombre: string;
+  anio: number;
+}
+
+export interface MateriaItem {
+  id_materia: number;
+  nombre: string;
 }
 
 export interface AlumnoItem {
   id_alumno: number;
   nombre: string;
   apellido: string;
-  id_curso: number;
-}
-
-export interface MateriaItem {
-  id_materia: number;
-  nombre_materia: string;
+  email: string;
 }
 
 export interface InscripcionItem {
   id_inscripcion: number;
   id_alumno: number;
+  id_curso: number;
+  fecha: string;
+}
+
+export interface CursoMateriaItem {
+  id_curso: number;
   id_materia: number;
 }
 
+// 1. Cursos
 export const DEMO_CURSOS: CursoItem[] = [
-  { id_curso: 1, nombre_curso: '1.º A' },
-  { id_curso: 2, nombre_curso: '2.º A' },
-  { id_curso: 3, nombre_curso: '3.º A' }
+  { id_curso: 1, nombre: '1 A', anio: 1 },
+  { id_curso: 2, nombre: '1 B', anio: 1 },
+  { id_curso: 3, nombre: '2 A', anio: 2 }
 ];
 
-export const DEMO_ALUMNOS: AlumnoItem[] = [
-  { id_alumno: 1, nombre: 'Lucía', apellido: 'Pérez', id_curso: 1 },
-  { id_alumno: 2, nombre: 'Tomás', apellido: 'Gómez', id_curso: 2 },
-  { id_alumno: 3, nombre: 'Sofía', apellido: 'Ruiz', id_curso: 1 }
-];
-
+// 2. Materias
 export const DEMO_MATERIAS: MateriaItem[] = [
-  { id_materia: 1, nombre_materia: 'Matemática' },
-  { id_materia: 2, nombre_materia: 'Informática' },
-  { id_materia: 3, nombre_materia: 'Lengua' }
+  { id_materia: 1, nombre: 'Matemática' },
+  { id_materia: 2, nombre: 'Informática' },
+  { id_materia: 3, nombre: 'Historia' }
 ];
 
+// 3. Alumnos
+export const DEMO_ALUMNOS: AlumnoItem[] = [
+  { id_alumno: 1, nombre: 'Ana', apellido: 'Pérez', email: 'ana@escuela.com' },
+  { id_alumno: 2, nombre: 'Juan', apellido: 'López', email: 'juan@escuela.com' },
+  { id_alumno: 3, nombre: 'María', apellido: 'Gómez', email: 'maria@escuela.com' }
+];
+
+// 4. Inscripciones (Relación 1:N entre Alumnos y Cursos)
 export const DEMO_INSCRIPCIONES: InscripcionItem[] = [
-  { id_inscripcion: 1, id_alumno: 1, id_materia: 2 },
-  { id_inscripcion: 2, id_alumno: 1, id_materia: 1 },
-  { id_inscripcion: 3, id_alumno: 2, id_materia: 2 },
-  { id_inscripcion: 4, id_alumno: 3, id_materia: 3 }
+  { id_inscripcion: 1, id_alumno: 1, id_curso: 1, fecha: '2026-03-01' },
+  { id_inscripcion: 2, id_alumno: 2, id_curso: 1, fecha: '2026-03-01' },
+  { id_inscripcion: 3, id_alumno: 3, id_curso: 2, fecha: '2026-03-02' }
+];
+
+// 5. Curso_Materia (Relación N:M entre Cursos y Materias con PK compuesta)
+export const DEMO_CURSO_MATERIA: CursoMateriaItem[] = [
+  { id_curso: 1, id_materia: 1 }, // 1 A tiene Matemática
+  { id_curso: 1, id_materia: 2 }, // 1 A tiene Informática
+  { id_curso: 1, id_materia: 3 }, // 1 A tiene Historia
+  { id_curso: 2, id_materia: 1 }, // 1 B tiene Matemática
+  { id_curso: 2, id_materia: 3 }, // 1 B tiene Historia
+  { id_curso: 3, id_materia: 1 }, // 2 A tiene Matemática
+  { id_curso: 3, id_materia: 2 }  // 2 A tiene Informática
 ];
 
 // Metadatos de columnas y relaciones para visualizaciones
@@ -63,43 +84,54 @@ export interface TableMeta {
 }
 
 export const TABLES_META: Record<string, TableMeta> = {
-  cursos: {
-    name: 'cursos',
-    displayName: 'Tabla: cursos',
-    description: 'Registra las divisiones o años escolares disponibles.',
+  Cursos: {
+    name: 'Cursos',
+    displayName: 'Tabla: Cursos',
+    description: 'Almacena los cursos y divisiones de la institución educativa.',
     columns: [
-      { name: 'id_curso', type: 'INTEGER', isPk: true, isFk: false },
-      { name: 'nombre_curso', type: 'TEXT', isPk: false, isFk: false }
+      { name: 'id_curso', type: 'INT AUTO_INCREMENT', isPk: true, isFk: false },
+      { name: 'nombre', type: 'VARCHAR(50) NOT NULL', isPk: false, isFk: false },
+      { name: 'anio', type: 'INT NOT NULL', isPk: false, isFk: false }
     ]
   },
-  alumnos: {
-    name: 'alumnos',
-    displayName: 'Tabla: alumnos',
-    description: 'Guarda los datos personales y el curso de cada estudiante.',
+  Materias: {
+    name: 'Materias',
+    displayName: 'Tabla: Materias',
+    description: 'Almacena las materias o asignaturas que se dictan en la escuela.',
     columns: [
-      { name: 'id_alumno', type: 'INTEGER', isPk: true, isFk: false },
-      { name: 'nombre', type: 'TEXT', isPk: false, isFk: false },
-      { name: 'apellido', type: 'TEXT', isPk: false, isFk: false },
-      { name: 'id_curso', type: 'INTEGER', isPk: false, isFk: true, references: 'cursos.id_curso' }
+      { name: 'id_materia', type: 'INT AUTO_INCREMENT', isPk: true, isFk: false },
+      { name: 'nombre', type: 'VARCHAR(100) NOT NULL', isPk: false, isFk: false }
     ]
   },
-  materias: {
-    name: 'materias',
-    displayName: 'Tabla: materias',
-    description: 'Contiene las asignaturas dictadas en el colegio.',
+  Alumnos: {
+    name: 'Alumnos',
+    displayName: 'Tabla: Alumnos',
+    description: 'Guarda los datos personales y el correo electrónico de los estudiantes.',
     columns: [
-      { name: 'id_materia', type: 'INTEGER', isPk: true, isFk: false },
-      { name: 'nombre_materia', type: 'TEXT', isPk: false, isFk: false }
+      { name: 'id_alumno', type: 'INT AUTO_INCREMENT', isPk: true, isFk: false },
+      { name: 'nombre', type: 'VARCHAR(100) NOT NULL', isPk: false, isFk: false },
+      { name: 'apellido', type: 'VARCHAR(100) NOT NULL', isPk: false, isFk: false },
+      { name: 'email', type: 'VARCHAR(150) NOT NULL', isPk: false, isFk: false }
     ]
   },
-  inscripciones: {
-    name: 'inscripciones',
-    displayName: 'Tabla: inscripciones',
-    description: 'Relaciona a cada alumno con las materias en las que está inscripto.',
+  Inscripciones: {
+    name: 'Inscripciones',
+    displayName: 'Tabla: Inscripciones',
+    description: 'Registra en qué curso está inscripto cada estudiante y en qué fecha.',
     columns: [
-      { name: 'id_inscripcion', type: 'INTEGER', isPk: true, isFk: false },
-      { name: 'id_alumno', type: 'INTEGER', isPk: false, isFk: true, references: 'alumnos.id_alumno' },
-      { name: 'id_materia', type: 'INTEGER', isPk: false, isFk: true, references: 'materias.id_materia' }
+      { name: 'id_inscripcion', type: 'INT AUTO_INCREMENT', isPk: true, isFk: false },
+      { name: 'id_alumno', type: 'INT NOT NULL', isPk: false, isFk: true, references: 'Alumnos.id_alumno' },
+      { name: 'id_curso', type: 'INT NOT NULL', isPk: false, isFk: true, references: 'Cursos.id_curso' },
+      { name: 'fecha', type: 'DATE NOT NULL', isPk: false, isFk: false }
+    ]
+  },
+  Curso_Materia: {
+    name: 'Curso_Materia',
+    displayName: 'Tabla: Curso_Materia',
+    description: 'Modela la relación muchos a muchos: qué materias se dictan en cada curso escolar.',
+    columns: [
+      { name: 'id_curso', type: 'INT NOT NULL', isPk: true, isFk: true, references: 'Cursos.id_curso' },
+      { name: 'id_materia', type: 'INT NOT NULL', isPk: true, isFk: true, references: 'Materias.id_materia' }
     ]
   }
 };

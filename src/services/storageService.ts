@@ -1,10 +1,11 @@
-import { StudentSession, QuizAttempt, ModuleProgress } from '../types';
+import { StudentSession, QuizAttempt, ModuleProgress, UnitProgress } from '../types';
 import { getSupabaseClient } from './supabaseClient';
 
 const STORAGE_KEYS = {
   CURRENT_STUDENT: 'bd_escolar_student_session',
   ATTEMPTS: 'bd_escolar_quiz_attempts',
   MODULES_PROGRESS: 'bd_escolar_modules_progress',
+  UNITS_PROGRESS: 'bd_escolar_units_progress',
 };
 
 // Generador de ID simple y seguro
@@ -80,6 +81,51 @@ export function saveModuleProgress(progress: ModuleProgress): void {
     localStorage.setItem(STORAGE_KEYS.MODULES_PROGRESS, JSON.stringify(all));
   } catch (e) {
     console.error('Error guardando progreso del módulo:', e);
+  }
+}
+
+/* ==========================================================================
+   PROGRESO DE LAS 10 UNIDADES DE APRENDIZAJE
+   ========================================================================== */
+
+export function getAllUnitsProgress(): Record<number, UnitProgress> {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEYS.UNITS_PROGRESS);
+    if (!raw) return {};
+    return JSON.parse(raw);
+  } catch (e) {
+    console.error('Error leyendo progreso de unidades:', e);
+    return {};
+  }
+}
+
+export function saveUnitProgress(update: {
+  unitId: number;
+  visited?: boolean;
+  activityCompleted?: boolean;
+  quizScore?: number;
+}): void {
+  try {
+    const all = getAllUnitsProgress();
+    const existing = all[update.unitId] || {
+      unitId: update.unitId,
+      visited: false,
+      activityCompleted: false,
+      lastVisitedAt: new Date().toISOString()
+    };
+
+    all[update.unitId] = {
+      ...existing,
+      ...update,
+      visited: update.visited !== undefined ? update.visited : existing.visited,
+      activityCompleted: update.activityCompleted !== undefined ? update.activityCompleted : existing.activityCompleted,
+      quizScore: update.quizScore !== undefined ? update.quizScore : existing.quizScore,
+      lastVisitedAt: new Date().toISOString()
+    };
+
+    localStorage.setItem(STORAGE_KEYS.UNITS_PROGRESS, JSON.stringify(all));
+  } catch (e) {
+    console.error('Error guardando progreso de unidad:', e);
   }
 }
 
@@ -267,4 +313,5 @@ export function seedDemoClassroomData(): void {
 export function clearAllLocalData(): void {
   localStorage.removeItem(STORAGE_KEYS.ATTEMPTS);
   localStorage.removeItem(STORAGE_KEYS.MODULES_PROGRESS);
+  localStorage.removeItem(STORAGE_KEYS.UNITS_PROGRESS);
 }

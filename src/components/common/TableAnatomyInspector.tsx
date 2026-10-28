@@ -57,7 +57,7 @@ export const TableAnatomyInspector: React.FC = () => {
                 nombre (Campo)
               </th>
               <th className="p-3">apellido</th>
-              <th className="p-3">id_curso</th>
+              <th className="p-3">email</th>
             </tr>
           </thead>
           <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
@@ -85,7 +85,7 @@ export const TableAnatomyInspector: React.FC = () => {
                     {a.nombre}
                   </td>
                   <td className="p-3 text-slate-800 dark:text-slate-200">{a.apellido}</td>
-                  <td className="p-3 font-mono text-slate-600 dark:text-slate-400">{a.id_curso}</td>
+                  <td className="p-3 font-mono text-slate-600 dark:text-slate-400">{a.email}</td>
                 </tr>
               );
             })}
