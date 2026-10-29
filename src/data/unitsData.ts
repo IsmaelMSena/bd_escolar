@@ -7,6 +7,7 @@ export interface QuizQuestion {
   options: string[];
   correctIndex: number;
   explanation: string;
+  category?: string;
 }
 
 export interface ActivityDefinition {
@@ -144,6 +145,117 @@ export const LEARNING_UNITS: LearningUnit[] = [
         ],
         correctIndex: 0,
         explanation: 'Separar en tablas especializadas elimina la duplicación de datos (redundancia).'
+      },
+      {
+        id: 'u1_q3',
+        question: 'Si en la tabla Alumnos observamos la columna vertical "email", ¿qué elemento es técnicamente?',
+        options: [
+          'Un registro completo.',
+          'Un campo o atributo que define una propiedad común a todos los alumnos.',
+          'El nombre de la base de datos.'
+        ],
+        correctIndex: 1,
+        explanation: 'Las columnas verticales se denominan campos o atributos y definen qué dato se almacena en esa posición.'
+      },
+      {
+        id: 'u1_q4',
+        question: '¿Cuál de los siguientes elementos corresponde a un DATO o valor atómico dentro de una celda?',
+        options: [
+          'La tabla Cursos entera.',
+          'La columna apellido completa.',
+          'El texto "ana@escuela.com" contenido en la fila de Ana.'
+        ],
+        correctIndex: 2,
+        explanation: 'Un dato elemental es el valor puntual ubicado en la intersección de una fila y una columna (celda).'
+      },
+      {
+        id: 'u1_q5',
+        question: 'En una planilla no dividida en tablas, los datos de un curso se escriben 30 veces por cada alumno inscripto. ¿Qué problema genera esto?',
+        options: [
+          'Que la computadora se apaga.',
+          'Redundancia de datos, ocupando espacio extra y aumentando el riesgo de inconsistencias.',
+          'Ninguno, es la mejor forma de organizar datos.'
+        ],
+        correctIndex: 1,
+        explanation: 'La redundancia multiplica el almacenamiento innecesariamente y provoca errores cuando se debe actualizar información.'
+      },
+      {
+        id: 'u1_q6',
+        question: '¿Qué es un Sistema Gestor de Bases de Datos Relacionales (RDBMS como MySQL)?',
+        options: [
+          'El software encargado de almacenar, administrar, consultar y proteger los datos en el servidor.',
+          'Un programa para retocar fotografías de los estudiantes.',
+          'Una marca de teclado para computadoras.'
+        ],
+        correctIndex: 0,
+        explanation: 'Un SGBD o RDBMS es el motor de software que gestiona la persistencia, la concurrencia y las consultas relacionales.'
+      },
+      {
+        id: 'u1_q7',
+        question: 'En una tabla escolar con 30 estudiantes y 4 columnas, ¿cuántos registros en total contiene la tabla?',
+        options: [
+          '120 registros.',
+          '4 registros.',
+          '30 registros.'
+        ],
+        correctIndex: 2,
+        explanation: 'La cantidad de registros equivale al número de filas horizontales de datos (30 alumnos).'
+      },
+      {
+        id: 'u1_q8',
+        question: '¿Por qué no debemos colocar en una sola celda el texto "Ana Pérez, DNI 40123456, 1.° A, Calle Falsa 123"?',
+        options: [
+          'Porque viola el principio de datos atómicos y dificulta ordenar o buscar por DNI o apellido.',
+          'Porque las computadoras no admiten números y letras en la misma oración.',
+          'Porque la ley prohíbe escribir direcciones en computadoras.'
+        ],
+        correctIndex: 0,
+        category: 'error_detection',
+        explanation: 'Los datos deben ser atómicos (indivisibles). Juntar datos impide realizar filtros, ordenamientos y búsquedas precisas.'
+      },
+      {
+        id: 'u1_q9',
+        question: 'En la comparación escolar clásica, ¿a qué equivale una TABLA completa dentro de una secretaría tradicional?',
+        options: [
+          'A una sola hoja de papel borrador.',
+          'A un archivero temático con fichas del mismo tipo (por ejemplo, el fichero de Alumnos).',
+          'Al timbre del recreo.'
+        ],
+        correctIndex: 1,
+        explanation: 'Una tabla reúne fichas (registros) homogéneas sobre un mismo tema o entidad (Alumnos, Cursos, etc.).'
+      },
+      {
+        id: 'u1_q10',
+        question: '¿Qué significa que una base de datos mantenga información "consistente"?',
+        options: [
+          'Que los datos no presentan contradicciones entre sí a lo largo del sistema.',
+          'Que todos los registros fueron creados exactamente a la misma hora.',
+          'Que la base de datos se guarda en un pendrive.'
+        ],
+        correctIndex: 0,
+        explanation: 'Consistencia significa que los datos son coherentes, fiables y sin discrepancias en ninguna parte del sistema.'
+      },
+      {
+        id: 'u1_q11',
+        question: 'Si una preceptora actualiza el teléfono de un alumno en una ficha pero no en la otra, ¿qué problema de datos ocurrió?',
+        options: [
+          'Una mejora de la velocidad.',
+          'Un corte del suministro eléctrico.',
+          'Una inconsistencia de datos provocada por duplicación no centralizada.'
+        ],
+        correctIndex: 2,
+        explanation: 'Tener datos repetidos en múltiples lugares provoca que se actualicen unos y otros no, perdiendo confiabilidad.'
+      },
+      {
+        id: 'u1_q12',
+        question: '¿Cuál es el orden correcto de menor a mayor jerarquía en una base de datos?',
+        options: [
+          'Tabla → Dato → Campo → Base de datos.',
+          'Dato en celda → Campo (columna) → Registro (fila) → Tabla → Base de datos.',
+          'Base de datos → Registro → Campo → Dato.'
+        ],
+        correctIndex: 1,
+        explanation: 'El dato elemental se aloja en un campo; los campos forman un registro; los registros componen la tabla y el conjunto forma la base.'
       }
     ],
     synthesis: {
@@ -233,6 +345,116 @@ export const LEARNING_UNITS: LearningUnit[] = [
         ],
         correctIndex: 0,
         explanation: 'Inscripciones vincula formalmente al estudiante con su división escolar.'
+      },
+      {
+        id: 'u2_q3',
+        question: 'En la tabla Alumnos, ¿qué tipo de dato de MySQL se utiliza para el nombre y apellido?',
+        options: [
+          'INT (número entero).',
+          'VARCHAR(100), para almacenar cadenas de texto de longitud variable.',
+          'DATE (fecha).'
+        ],
+        correctIndex: 1,
+        explanation: 'VARCHAR permite guardar textos alfanuméricos como nombres y apellidos con límite flexible.'
+      },
+      {
+        id: 'u2_q4',
+        question: '¿Qué tipo de dato es el más adecuado para el campo "anio" en la tabla Cursos (1, 2, 3)?',
+        options: [
+          'VARCHAR(500)',
+          'DATE',
+          'INT (número entero)'
+        ],
+        correctIndex: 2,
+        explanation: 'Los números de año lectivo son valores enteros y se definen con el tipo INT.'
+      },
+      {
+        id: 'u2_q5',
+        question: 'En la tabla Inscripciones, ¿cuál es el formato estándar que exige MySQL para la columna "fecha"?',
+        options: [
+          'AAAA-MM-DD (ejemplo: 2026-03-01).',
+          'DD/MM/AAAA (ejemplo: 01/03/2026).',
+          'Texto libre sin ningún formato.'
+        ],
+        correctIndex: 0,
+        explanation: 'El tipo de dato DATE en MySQL sigue la norma ISO: cuatro dígitos de año, dos de mes y dos de día.'
+      },
+      {
+        id: 'u2_q6',
+        question: 'Si tenemos al alumno Juan López (id_alumno = 2) y al curso 1.° A (id_curso = 1), ¿cómo se registra su inscripción?',
+        options: [
+          'Escribiendo "Juan López está en 1.° A" en un archivo de texto suelto.',
+          'Con una fila en Inscripciones que reúne su id_inscripcion, id_alumno = 2, id_curso = 1 y la fecha.',
+          'Borrando a Juan López de la tabla Alumnos.'
+        ],
+        correctIndex: 1,
+        explanation: 'La tabla Inscripciones relaciona ambos identificadores numéricos en un registro formal.'
+      },
+      {
+        id: 'u2_q7',
+        question: '¿Qué significa la restricción NOT NULL en la columna "apellido" de la tabla Alumnos?',
+        options: [
+          'Que el apellido es optativo y puede quedar en blanco.',
+          'Que los apellidos solo pueden tener letras en minúscula.',
+          'Que es un dato obligatorio que jamás puede guardarse vacío al cargar un alumno.'
+        ],
+        correctIndex: 2,
+        explanation: 'NOT NULL impide que un campo obligatorio quede sin valor en la base de datos.'
+      },
+      {
+        id: 'u2_q8',
+        question: '¿Qué columnas forman la tabla Materias en nuestro sistema escolar?',
+        options: [
+          'id_materia (INT) y nombre (VARCHAR).',
+          'nombre_alumno, apellido, email.',
+          'id_curso, aula, turno.'
+        ],
+        correctIndex: 0,
+        explanation: 'Materias actúa como catálogo de asignaturas con su identificador y su nombre (ej. Matemática).'
+      },
+      {
+        id: 'u2_q9',
+        question: 'Si queremos consultar el correo electrónico para avisar a un estudiante, ¿en qué tabla debemos buscar?',
+        options: [
+          'En la tabla Cursos.',
+          'En la tabla Alumnos.',
+          'En la tabla Curso_Materia.'
+        ],
+        correctIndex: 1,
+        explanation: 'La tabla Alumnos almacena los datos de contacto personales de cada estudiante.'
+      },
+      {
+        id: 'u2_q10',
+        question: '¿Por qué la tabla Inscripciones guarda id_alumno en vez de escribir nuevamente el nombre y apellido completos?',
+        options: [
+          'Para evitar redundancias y errores ortográficos, referenciando directamente el registro único de Alumnos.',
+          'Porque MySQL no permite escribir nombres con más de 3 letras.',
+          'Porque a los alumnos no les gusta ver sus nombres escritos.'
+        ],
+        correctIndex: 0,
+        explanation: 'Usar identificadores numéricos elimina la duplicación de datos y garantiza exactitud referencial.'
+      },
+      {
+        id: 'u2_q11',
+        question: 'En la tabla Cursos, ¿qué representa el registro: (3, "2 A", 2)?',
+        options: [
+          'Que hay 3 profesores en la sala.',
+          'Un curso con 2 alumnos inscriptos.',
+          'La división "2.° A" correspondiente al segundo año de secundaria.'
+        ],
+        correctIndex: 2,
+        explanation: 'El registro define la división escolar 2.° A con identificador 3 y año lectivo 2.'
+      },
+      {
+        id: 'u2_q12',
+        question: '¿Cuáles son las 5 tablas que componen el modelo relacional escolar completo de nuestra plataforma?',
+        options: [
+          'Profesores, Alumnos, Notas, Materias y Aulas.',
+          'Cursos, Materias, Alumnos, Inscripciones y Curso_Materia.',
+          'Biblioteca, Cooperadora, Kiosco, Patio y Dirección.'
+        ],
+        correctIndex: 1,
+        explanation: 'El modelo oficial escolar de 5 tablas se compone de Cursos, Materias, Alumnos, Inscripciones y Curso_Materia.'
       }
     ],
     synthesis: {
@@ -316,6 +538,116 @@ export const LEARNING_UNITS: LearningUnit[] = [
         ],
         correctIndex: 0,
         explanation: 'La clave foránea asegura la integridad referencial impidiendo registros huérfanos.'
+      },
+      {
+        id: 'u3_q3',
+        question: 'En la tabla Alumnos, ¿cuál es la Clave Primaria (PK) que identifica a cada estudiante?',
+        options: [
+          'El campo email.',
+          'El campo id_alumno.',
+          'El campo apellido.'
+        ],
+        correctIndex: 1,
+        explanation: 'id_alumno es el identificador numérico único e inmutable asignado a cada fila de alumno.'
+      },
+      {
+        id: 'u3_q4',
+        question: 'En la tabla Inscripciones (id_inscripcion, id_alumno, id_curso, fecha), ¿cuáles son las Claves Foráneas (FK)?',
+        options: [
+          'Únicamente id_inscripcion.',
+          'La fecha de matriculación.',
+          'id_alumno e id_curso, porque apuntan a las tablas Alumnos y Cursos.'
+        ],
+        correctIndex: 2,
+        explanation: 'id_alumno e id_curso son claves foráneas que vinculan la inscripción con los registros padres.'
+      },
+      {
+        id: 'u3_q5',
+        question: 'Si en la escuela solo existen los cursos con id 1, 2 y 3, ¿qué ocurre si intentamos inscribir a un alumno con id_curso = 99?',
+        options: [
+          'El motor de base de datos rechaza la operación por violación de clave foránea (Foreign Key Constraint).',
+          'La base de datos inventa un curso nuevo llamado "Curso 99".',
+          'El sistema borra al estudiante de la escuela.'
+        ],
+        correctIndex: 0,
+        explanation: 'La integridad referencial prohíbe vincular datos con valores que no existen en la tabla padre.'
+      },
+      {
+        id: 'u3_q6',
+        question: '¿Qué es un registro huérfano en un sistema escolar de base de datos?',
+        options: [
+          'Un estudiante que aprobó todas las materias del año.',
+          'Un registro en una tabla secundaria cuya clave foránea apunta a un registro padre inexistente o eliminado.',
+          'Una columna que no tiene título.'
+        ],
+        correctIndex: 1,
+        explanation: 'Un registro huérfano queda desconectado y rompe la coherencia lógica de la información.'
+      },
+      {
+        id: 'u3_q7',
+        question: '¿Para qué sirve la instrucción AUTO_INCREMENT en la clave primaria id_alumno?',
+        options: [
+          'Para que el sistema aumente el tamaño del texto.',
+          'Para que los estudiantes aprueben automáticamente.',
+          'Para que MySQL genere números correlativos automáticos (1, 2, 3...) sin intervención manual.'
+        ],
+        correctIndex: 2,
+        explanation: 'AUTO_INCREMENT genera automáticamente el valor numérico correlativo de cada nuevo registro.'
+      },
+      {
+        id: 'u3_q8',
+        question: '¿Puede un mismo valor de Clave Foránea (FK) repetirse en varias filas de la misma tabla?',
+        options: [
+          'Sí, por ejemplo id_curso = 1 puede repetirse en muchas inscripciones de distintos alumnos.',
+          'No, las claves foráneas están prohibidas de repetirse bajo cualquier concepto.',
+          'Solo los días lunes.'
+        ],
+        correctIndex: 0,
+        explanation: 'Una clave foránea puede repetirse tantas veces como registros hijos estén vinculados al mismo padre.'
+      },
+      {
+        id: 'u3_q9',
+        question: '¿Puede un valor de Clave Primaria (PK) repetirse en dos filas distintas de una misma tabla?',
+        options: [
+          'Sí, siempre que los alumnos tengan el mismo nombre.',
+          'No: la clave primaria debe ser estrictamente única e irrepetible en toda la tabla.',
+          'Depende del año escolar.'
+        ],
+        correctIndex: 1,
+        explanation: 'La regla de entidad de las bases de datos exige que cada clave primaria sea única sin excepciones.'
+      },
+      {
+        id: 'u3_q10',
+        question: 'En la tabla Curso_Materia, ¿cómo está conformada la Clave Primaria?',
+        options: [
+          'Por el nombre de la escuela.',
+          'Por una sola columna llamada nota.',
+          'Por una clave primaria compuesta por los dos campos juntos: (id_curso, id_materia).'
+        ],
+        correctIndex: 2,
+        explanation: 'La clave compuesta garantiza que no se pueda asignar dos veces la misma materia al mismo curso.'
+      },
+      {
+        id: 'u3_q11',
+        question: 'Si la escuela quiere dar de baja el curso 1.° A, pero aún hay 25 alumnos inscriptos en él, ¿qué impide que se borre accidentalmente?',
+        options: [
+          'La restricción de integridad referencial de la clave foránea en la tabla Inscripciones.',
+          'El antivirus de la computadora.',
+          'El botón de apagar la pantalla.'
+        ],
+        correctIndex: 0,
+        explanation: 'La restricción FK impide borrar el registro padre mientras existan registros hijos que dependen de él.'
+      },
+      {
+        id: 'u3_q12',
+        question: '¿Por qué es preferible usar un identificador id_alumno numérico como Clave Primaria en vez del nombre y apellido?',
+        options: [
+          'Porque los números no ocupan memoria.',
+          'Porque los nombres pueden repetirse (homónimos) y los IDs numéricos son estables, únicos y no cambian.',
+          'Porque las computadoras no saben leer las vocales.'
+        ],
+        correctIndex: 1,
+        explanation: 'Los identificadores numéricos subrogados garantizan unicidad y estabilidad frente a homónimos o cambios de nombre.'
       }
     ],
     synthesis: {
@@ -407,6 +739,116 @@ export const LEARNING_UNITS: LearningUnit[] = [
         ],
         correctIndex: 0,
         explanation: 'La combinación de ambos identificadores forma una clave primaria compuesta irrepetible.'
+      },
+      {
+        id: 'u4_q3',
+        question: '¿Qué tipo de relación vincula a Cursos con Alumnos a través de la tabla Inscripciones?',
+        options: [
+          'Muchos a Muchos (N:M).',
+          'Uno a Muchos (1:N), un curso tiene muchos alumnos pero cada alumno se inscribe en un curso.',
+          'Cero a Cero.'
+        ],
+        correctIndex: 1,
+        explanation: 'La división escolar (1) contiene a muchos estudiantes (N).'
+      },
+      {
+        id: 'u4_q4',
+        question: '¿Por qué la relación entre Cursos y Materias se clasifica como Muchos a Muchos (N:M)?',
+        options: [
+          'Porque los profesores se olvidan los temas.',
+          'Porque las materias no tienen nombre.',
+          'Porque un curso cursa muchas materias y una misma materia se dicta en múltiples cursos.'
+        ],
+        correctIndex: 2,
+        explanation: '1.° A y 1.° B cursan Matemática, e Historia se dicta en 1.° B y 2.° A; la relación es bidireccionalmente múltiple.'
+      },
+      {
+        id: 'u4_q5',
+        question: '¿Cómo se resuelve técnicamente una relación Muchos a Muchos (N:M) en el modelo relacional?',
+        options: [
+          'Creando una tabla intermedia que almacena los pares de claves foráneas de ambas tablas.',
+          'Creando 50 columnas en la tabla Cursos llamadas materia_1, materia_2, etc.',
+          'Eliminando todas las materias menos una.'
+        ],
+        correctIndex: 0,
+        explanation: 'La tabla intermedia descompone la relación N:M en dos relaciones 1:N perfectamente normalizadas.'
+      },
+      {
+        id: 'u4_q6',
+        question: 'Si el curso 1.° B (id_curso = 2) dicta Matemática (id_materia = 1) e Historia (id_materia = 3), ¿qué dos filas se insertan en Curso_Materia?',
+        options: [
+          '("Primero B", "Matemática") y ("Primero B", "Historia").',
+          '(id_curso: 2, id_materia: 1) y (id_curso: 2, id_materia: 3).',
+          '(1, 2) y (3, 2).'
+        ],
+        correctIndex: 1,
+        explanation: 'Cada fila de Curso_Materia almacena el par de identificadores: (2, 1) y (2, 3).'
+      },
+      {
+        id: 'u4_q7',
+        question: '¿Qué pasaría si intentamos asignar dos veces Matemática (id_materia = 1) a 1.° B (id_curso = 2) en Curso_Materia?',
+        options: [
+          'El curso tendrá dos notas finales de Matemática.',
+          'Se borran todas las materias de la escuela.',
+          'El motor de base de datos arrojará un error de clave primaria duplicada impidiendo la doble asignación.'
+        ],
+        correctIndex: 2,
+        explanation: 'Al ser (id_curso, id_materia) la clave primaria compuesta, se rechaza cualquier inserción duplicada del mismo par.'
+      },
+      {
+        id: 'u4_q8',
+        question: 'En una relación Uno a Muchos (1:N), ¿en qué tabla debe situarse la Clave Foránea?',
+        options: [
+          'En la tabla del extremo "Muchos" (N).',
+          'En la tabla del extremo "Uno" (1).',
+          'En una base de datos diferente.'
+        ],
+        correctIndex: 0,
+        explanation: 'La clave foránea siempre reside en el lado del Muchos para apuntar a la fila única del lado Uno.'
+      },
+      {
+        id: 'u4_q9',
+        question: '¿Cuál de los siguientes es un ejemplo de relación Uno a Uno (1:1)?',
+        options: [
+          'Un curso y los 30 alumnos que asisten a él.',
+          'Cada estudiante y su ficha de legajo único individual.',
+          'Una materia y los 5 profesores que la dictan.'
+        ],
+        correctIndex: 1,
+        explanation: 'Un legajo pertenece a un único estudiante y cada estudiante tiene un único legajo oficial.'
+      },
+      {
+        id: 'u4_q10',
+        question: '¿Por qué es una mala práctica poner en la tabla Cursos un campo de texto con las materias separadas por comas?',
+        options: [
+          'Porque impide consultar qué cursos dictan una materia específica, dificulta filtros y viola la atomicidad.',
+          'Porque las computadoras no admiten signos de puntuación.',
+          'Porque los profesores se enojan si ven comas.'
+        ],
+        correctIndex: 0,
+        explanation: 'Guardar listas de texto en una sola celda impide que el motor de base de datos indexe, ordene y filtre eficientemente.'
+      },
+      {
+        id: 'u4_q11',
+        question: '¿Qué dos tablas se conectan mediante claves foráneas con la tabla intermedia Curso_Materia?',
+        options: [
+          'Alumnos y Horarios.',
+          'Preceptores y Cooperadora.',
+          'La tabla Cursos (mediante id_curso) y la tabla Materias (mediante id_materia).'
+        ],
+        correctIndex: 2,
+        explanation: 'Curso_Materia tiene dos claves foráneas que apuntan a Cursos y a Materias respectivamente.'
+      },
+      {
+        id: 'u4_q12',
+        question: 'Con las 5 tablas implementadas, ¿cómo consultamos qué materias cursa la alumna Ana Pérez?',
+        options: [
+          'Preguntando al kiosquero de la escuela.',
+          'Siguiendo la cadena relacional: Alumnos → Inscripciones → Cursos → Curso_Materia → Materias.',
+          'Abriendo un documento de Word.'
+        ],
+        correctIndex: 1,
+        explanation: 'Las relaciones conectan en cadena: Ana tiene un curso inscripto, y ese curso tiene sus materias en Curso_Materia.'
       }
     ],
     synthesis: {

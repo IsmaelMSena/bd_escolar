@@ -52,20 +52,20 @@ export const StudentAuthModal: React.FC<StudentAuthModalProps> = ({
 
   return (
     <div className="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4">
-      <div className="bg-white rounded-3xl max-w-md w-full p-6 sm:p-8 shadow-2xl border border-slate-200 animate-scaleUp space-y-6">
-        <div className="flex items-center justify-between pb-3 border-b border-slate-100">
+      <div className="bg-white dark:bg-slate-900 rounded-3xl max-w-md w-full p-6 sm:p-8 shadow-2xl border border-slate-200 dark:border-slate-800 animate-scaleUp space-y-6 transition-colors">
+        <div className="flex items-center justify-between pb-3 border-b border-slate-100 dark:border-slate-800">
           <div className="flex items-center gap-2">
-            <div className="p-2 bg-indigo-100 text-indigo-600 rounded-xl">
+            <div className="p-2 bg-indigo-100 dark:bg-indigo-950 text-indigo-600 dark:text-indigo-400 rounded-xl">
               <User className="w-5 h-5" />
             </div>
             <div>
-              <h3 className="font-bold text-slate-900 text-base">Identificación Escolar</h3>
-              <p className="text-[11px] text-slate-500">Sin necesidad de correo electrónico</p>
+              <h3 className="font-bold text-slate-900 dark:text-white text-base">Identificación Escolar</h3>
+              <p className="text-[11px] text-slate-500 dark:text-slate-400">Sin contraseñas complejas ni correo electrónico</p>
             </div>
           </div>
           <button
             onClick={onClose}
-            className="p-1.5 text-slate-400 hover:text-slate-600 rounded-lg hover:bg-slate-100"
+            className="p-1.5 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition"
           >
             <X className="w-4 h-4" />
           </button>
@@ -74,7 +74,7 @@ export const StudentAuthModal: React.FC<StudentAuthModalProps> = ({
         <form onSubmit={handleSubmit} className="space-y-4">
           {/* Avatar selector */}
           <div>
-            <label className="text-xs font-bold text-slate-700 block mb-2">Elegí tu Avatar:</label>
+            <label className="text-xs font-bold text-slate-700 dark:text-slate-300 block mb-2">Elegí tu Avatar:</label>
             <div className="grid grid-cols-6 gap-2">
               {AVATARS.map((av) => (
                 <button
@@ -83,8 +83,8 @@ export const StudentAuthModal: React.FC<StudentAuthModalProps> = ({
                   onClick={() => setSelectedAvatar(av)}
                   className={`text-2xl p-2 rounded-xl transition ${
                     selectedAvatar === av
-                      ? 'bg-indigo-100 ring-2 ring-indigo-500 scale-105'
-                      : 'bg-slate-50 hover:bg-slate-100'
+                      ? 'bg-indigo-100 dark:bg-indigo-950 ring-2 ring-indigo-500 scale-105'
+                      : 'bg-slate-50 dark:bg-slate-800 hover:bg-slate-100 dark:hover:bg-slate-700'
                   }`}
                 >
                   {av}
@@ -95,7 +95,7 @@ export const StudentAuthModal: React.FC<StudentAuthModalProps> = ({
 
           {/* Name input */}
           <div className="space-y-1">
-            <label className="text-xs font-bold text-slate-700 block">Tu Nombre y Apellido:</label>
+            <label className="text-xs font-bold text-slate-700 dark:text-slate-300 block">Tu Nombre y Apellido:</label>
             <input
               type="text"
               value={name}
@@ -104,14 +104,14 @@ export const StudentAuthModal: React.FC<StudentAuthModalProps> = ({
                 setError('');
               }}
               placeholder="Ej: Lucía Pérez"
-              className="w-full px-4 py-2.5 rounded-xl border border-slate-300 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
+              className="w-full px-4 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
               autoFocus
             />
           </div>
 
           {/* Classroom code input */}
           <div className="space-y-1">
-            <label className="text-xs font-bold text-slate-700 block">Código de Aula / Curso:</label>
+            <label className="text-xs font-bold text-slate-700 dark:text-slate-300 block">Curso / División:</label>
             <input
               type="text"
               value={classroomCode}
@@ -119,22 +119,22 @@ export const StudentAuthModal: React.FC<StudentAuthModalProps> = ({
                 setClassroomCode(e.target.value);
                 setError('');
               }}
-              placeholder="Ej: 3A-2025"
-              className="w-full px-4 py-2.5 rounded-xl border border-slate-300 text-sm font-mono uppercase focus:outline-none focus:ring-2 focus:ring-indigo-500"
+              placeholder="Ej: 4.° A o 3.° 2.ª"
+              className="w-full px-4 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white text-sm uppercase focus:outline-none focus:ring-2 focus:ring-indigo-500 font-mono"
             />
-            <p className="text-[11px] text-slate-400">
+            <p className="text-[11px] text-slate-400 dark:text-slate-500">
               El docente utiliza este código para agrupar los resultados de tu división.
             </p>
           </div>
 
           {error && (
-            <p className="text-xs text-rose-600 font-semibold">{error}</p>
+            <p className="text-xs text-rose-600 dark:text-rose-400 font-semibold">{error}</p>
           )}
 
           <div className="pt-2">
             <button
               type="submit"
-              className="w-full py-3 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-sm shadow transition"
+              className="w-full py-3 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-sm shadow transition cursor-pointer"
             >
               GUARDAR MI PERFIL
             </button>

@@ -5,8 +5,10 @@ import { TableAnatomyInspector } from '../common/TableAnatomyInspector';
 import { InteractiveSqlBlock } from '../common/InteractiveSqlBlock';
 import { SqlInteractivePractice } from '../common/SqlInteractivePractice';
 import { ConceptCheckWidget } from '../common/ConceptCheckWidget';
-import { getAllUnitsProgress, saveUnitProgress } from '../../services/storageService';
-import { UnitProgress } from '../../types';
+import { StudentAuthModal } from '../common/StudentAuthModal';
+import { ExamModal } from '../exam/ExamModal';
+import { getAllUnitsProgress, saveUnitProgress, getAllExamAttempts, getCurrentStudent } from '../../services/storageService';
+import { UnitProgress, ExamAttempt, StudentSession } from '../../types';
 import { 
   ChevronLeft, ChevronRight, School, Shield, List, 
   CheckCircle2, Sun, Moon, AlertTriangle, RotateCcw, 
@@ -96,14 +98,29 @@ export const UnitViewer: React.FC<UnitViewerProps> = ({
 
   const [showToc, setShowToc] = useState<boolean>(false);
   const [unitsProgress, setUnitsProgress] = useState<Record<number, UnitProgress>>({});
+  const [isExamModalOpen, setIsExamModalOpen] = useState<boolean>(false);
+  const [examAttempts, setExamAttempts] = useState<ExamAttempt[]>([]);
+  const [currentStudent, setCurrentStudent] = useState<StudentSession | null>(() => getCurrentStudent());
+  const [isAuthModalOpen, setIsAuthModalOpen] = useState<boolean>(false);
 
   const totalUnits = LEARNING_UNITS.length;
   const currentUnit: LearningUnit = LEARNING_UNITS[currentUnitIndex] || LEARNING_UNITS[0];
+
+  const loadExamAttempts = async () => {
+    try {
+      const atts = await getAllExamAttempts();
+      setExamAttempts(atts);
+    } catch (e) {
+      console.error(e);
+    }
+  };
 
   // Cargar progreso guardado al montar
   useEffect(() => {
     const loaded = getAllUnitsProgress();
     setUnitsProgress(loaded);
+    loadExamAttempts();
+    setCurrentStudent(getCurrentStudent());
   }, []);
 
   // Registrar visita a la unidad actual
@@ -210,6 +227,18 @@ export const UnitViewer: React.FC<UnitViewerProps> = ({
             >
               <List className="w-4 h-4 text-indigo-600 dark:text-indigo-400" />
               <span className="hidden md:inline">Índice (10 Unidades)</span>
+            </button>
+
+            {/* Perfil del Estudiante */}
+            <button
+              onClick={() => setIsAuthModalOpen(true)}
+              className="flex items-center gap-1.5 px-2.5 sm:px-3 py-1.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-200 hover:bg-slate-200 dark:hover:bg-slate-700 transition text-xs font-semibold cursor-pointer"
+              title={currentStudent ? `Estudiante: ${currentStudent.name} (${currentStudent.classroomCode})` : 'Identificarse como estudiante'}
+            >
+              <span className="text-sm">{currentStudent?.avatar || '👤'}</span>
+              <span className="hidden sm:inline max-w-[110px] truncate">
+                {currentStudent ? currentStudent.name : 'Mi Perfil'}
+              </span>
             </button>
 
             {/* Alternar Tema Claro / Oscuro */}
@@ -596,16 +625,19 @@ export const UnitViewer: React.FC<UnitViewerProps> = ({
           )}
 
           {/* =================================================================
-              PRÁCTICA INTERACTIVA
+              PRÁCTICA INTERACTIVA CONSOLA SQL (Solo en Unidades 5 a 10)
+              En Unidades 1 a 4 las preguntas de práctica se integran abajo
               ================================================================= */}
-          <SqlInteractivePractice
-            activity={currentUnit.activity}
-            unitNumber={currentUnit.number}
-            onCompleted={handleActivityCompleted}
-          />
+          {currentUnit.number > 4 && (
+            <SqlInteractivePractice
+              activity={currentUnit.activity}
+              unitNumber={currentUnit.number}
+              onCompleted={handleActivityCompleted}
+            />
+          )}
 
           {/* =================================================================
-              COMPROBACIÓN DE CONCEPTOS (CUESTIONARIO)
+              COMPROBACIÓN DE CONCEPTOS Y PREGUNTAS DE PRÁCTICA FORMATIVA
               ================================================================= */}
           <ConceptCheckWidget
             questions={currentUnit.checkQuestions}
@@ -643,6 +675,81 @@ export const UnitViewer: React.FC<UnitViewerProps> = ({
               <span>Conclusión clave: {currentUnit.synthesis.takeaway}</span>
             </div>
           </div>
+
+          {/* =================================================================
+              EXAMEN INTEGRADOR OBLIGATORIO (MÓDULOS 1 A 4)
+              40 minutos · 20 preguntas · Criterio de aprobación 70 %
+              ================================================================= */}
+          {currentUnit.number <= 4 && (() => {
+            const latestExam = examAttempts.find(a => a.module_id === currentUnit.number);
+
+            return (
+              <div className="bg-gradient-to-br from-white to-indigo-50/70 dark:from-slate-900 dark:to-slate-950 border-2 border-indigo-200 dark:border-indigo-900/60 rounded-3xl p-6 sm:p-8 shadow-sm space-y-5 transition-colors">
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-indigo-100 dark:border-slate-800 pb-4">
+                  <div className="flex items-center gap-3">
+                    <div className="w-12 h-12 rounded-2xl bg-indigo-600 text-white flex items-center justify-center shadow-md shadow-indigo-600/20 shrink-0">
+                      <Award className="w-6 h-6" />
+                    </div>
+                    <div>
+                      <span className="text-[11px] font-bold uppercase tracking-wider text-indigo-600 dark:text-indigo-400 block">
+                        Evaluación Calificada de Cierre
+                      </span>
+                      <h3 className="text-lg sm:text-xl font-extrabold text-slate-900 dark:text-white">
+                        Examen Integrador — {currentUnit.title}
+                      </h3>
+                    </div>
+                  </div>
+
+                  {latestExam && (
+                    <div className="flex items-center gap-2 self-start sm:self-center shrink-0">
+                      <span className={`px-3 py-1 rounded-full text-xs font-bold border ${
+                        latestExam.passed
+                          ? 'bg-emerald-50 dark:bg-emerald-950/60 text-emerald-800 dark:text-emerald-300 border-emerald-300 dark:border-emerald-800'
+                          : 'bg-rose-50 dark:bg-rose-950/60 text-rose-800 dark:text-rose-300 border-rose-300 dark:border-rose-800'
+                      }`}>
+                        Último resultado: {latestExam.score_percentage}% ({latestExam.passed ? 'Aprobado' : 'Requiere Repaso'})
+                      </span>
+                    </div>
+                  )}
+                </div>
+
+                <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-300 leading-relaxed">
+                  Al finalizar este módulo, debés rendir el examen integrador independiente para evaluar los conocimientos adquiridos. El examen cuenta con un temporizador de <strong>40 minutos</strong> y <strong>20 preguntas</strong> que evalúan reconocimiento, comprensión y resolución de situaciones.
+                </p>
+
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs">
+                  <div className="p-3 bg-white dark:bg-slate-850 rounded-2xl border border-slate-200 dark:border-slate-800">
+                    <span className="text-slate-500 dark:text-slate-400 block text-[11px]">Duración límite</span>
+                    <span className="font-bold text-slate-900 dark:text-white text-sm">40 minutos</span>
+                  </div>
+                  <div className="p-3 bg-white dark:bg-slate-850 rounded-2xl border border-slate-200 dark:border-slate-800">
+                    <span className="text-slate-500 dark:text-slate-400 block text-[11px]">Estructura</span>
+                    <span className="font-bold text-slate-900 dark:text-white text-sm">20 preguntas</span>
+                  </div>
+                  <div className="p-3 bg-white dark:bg-slate-850 rounded-2xl border border-slate-200 dark:border-slate-800">
+                    <span className="text-slate-500 dark:text-slate-400 block text-[11px]">Aprobación</span>
+                    <span className="font-bold text-emerald-700 dark:text-emerald-400 text-sm">70 % (14 aciertos)</span>
+                  </div>
+                </div>
+
+                <div className="flex flex-col sm:flex-row items-center justify-between gap-3 pt-2">
+                  <span className="text-xs text-slate-500 dark:text-slate-400">
+                    {latestExam
+                      ? `Has completado ${latestExam.attempt_number} intento(s). Podés volver a rendir para mejorar tu nota.`
+                      : 'El temporizador iniciará una vez que presiones el botón de inicio.'}
+                  </span>
+
+                  <button
+                    onClick={() => setIsExamModalOpen(true)}
+                    className="flex items-center justify-center gap-2 px-6 py-3 rounded-2xl font-bold text-xs sm:text-sm bg-indigo-600 hover:bg-indigo-700 text-white transition active:scale-95 shadow-md shadow-indigo-600/20 w-full sm:w-auto"
+                  >
+                    <Award className="w-4 h-4" />
+                    <span>{latestExam ? 'Rendir Nuevo Intento / Ver Examen' : 'Comenzar Examen Integrador (40 min)'}</span>
+                  </button>
+                </div>
+              </div>
+            );
+          })()}
         </UnitErrorBoundary>
       </main>
 
@@ -690,6 +797,24 @@ export const UnitViewer: React.FC<UnitViewerProps> = ({
           </button>
         </div>
       </footer>
+      {/* Modal del Examen Integrador (Módulos 1 a 4) */}
+      <ExamModal
+        moduleId={currentUnit.number}
+        isOpen={isExamModalOpen}
+        onClose={() => setIsExamModalOpen(false)}
+        onExamFinished={() => {
+          loadExamAttempts();
+          setCurrentStudent(getCurrentStudent());
+        }}
+      />
+
+      {/* Modal de Identificación del Estudiante */}
+      <StudentAuthModal
+        isOpen={isAuthModalOpen}
+        onClose={() => setIsAuthModalOpen(false)}
+        currentStudent={currentStudent}
+        onStudentSaved={(s) => setCurrentStudent(s)}
+      />
     </div>
   );
 };
